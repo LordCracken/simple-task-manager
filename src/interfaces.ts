@@ -5,6 +5,24 @@ export interface ITask {
   id?: string;
 }
 
+export interface IReqConf {
+  url: string;
+  method?: 'POST' | 'GET';
+  headers?: HeadersInit;
+  body?: never;
+}
+
+export type IUseHttp = (
+  requestConfig: IReqConf,
+  applyData: (data: any) => void,
+) => { isLoading: boolean; error: string | null; sendRequest: () => void };
+
+export interface IServerTask {
+  [key: string]: {
+    text: string;
+  };
+}
+
 export interface ISection {
   children: ReactNode;
 }

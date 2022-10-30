@@ -38,6 +38,8 @@ const NewTask: FC<INewTask> = (props) => {
     }
     setIsLoading(false);
   };
+  const url =
+    'https://simple-tasks-manager-default-rtdb.europe-west1.firebasedatabase.app/tasks.json';
 
   return (
     <Section>
