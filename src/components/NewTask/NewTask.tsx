@@ -1,45 +1,33 @@
-import { useState, FC } from 'react';
+import { FC } from 'react';
 
 import Section from '../UI/Section';
 import TaskForm from './TaskForm';
+import useHttp from '../../hooks/use-http';
 
-import { INewTask } from '../../interfaces';
+import { INewTask, ITaskData } from '../../interfaces';
 
-const NewTask: FC<INewTask> = (props) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+const NewTask: FC<INewTask> = ({ onAddTask }) => {
+  const { isLoading, error, sendRequest: sendTaskRequest } = useHttp();
+
+  const createTask = (taskText: string, taskData: ITaskData) => {
+    const generatedId = taskData.name;
+    const createdTask = { id: generatedId, text: taskText };
+
+    onAddTask(createdTask);
+  };
 
   const enterTaskHandler = async (taskText: string) => {
     const url =
       'https://simple-tasks-manager-default-rtdb.europe-west1.firebasedatabase.app/tasks.json';
-    setIsLoading(true);
-    setError(null);
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        body: JSON.stringify({ text: taskText }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+    const headers = {
+      'Content-Type': 'application/json',
+    };
 
-      if (!response.ok) {
-        throw new Error('Request failed!');
-      }
-
-      const data = await response.json();
-
-      const generatedId = data.name; // firebase-specific => "name" contains generated id
-      const createdTask = { id: generatedId, text: taskText };
-
-      props.onAddTask(createdTask);
-    } catch (err) {
-      setError((err as Error).message || 'Something went wrong!');
-    }
-    setIsLoading(false);
+    sendTaskRequest(
+      { url, method: 'POST', headers, body: { text: taskText } },
+      createTask.bind(null, taskText),
+    );
   };
-  const url =
-    'https://simple-tasks-manager-default-rtdb.europe-west1.firebasedatabase.app/tasks.json';
 
   return (
     <Section>

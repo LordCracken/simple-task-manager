@@ -1,5 +1,10 @@
 import { ReactNode } from 'react';
 
+export interface ITaskData {
+  name: string;
+  text: string;
+}
+
 export interface ITask {
   text: string;
   id?: string;
@@ -9,7 +14,7 @@ export interface IReqConf {
   url: string;
   method?: 'POST' | 'GET';
   headers?: HeadersInit;
-  body?: never;
+  body?: unknown;
 }
 
 export type ISendRequest = (requestConfig: IReqConf, applyData: (data: any) => void) => void;
