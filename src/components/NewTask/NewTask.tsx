@@ -9,8 +9,9 @@ import { INewTask, ITaskData } from '../../interfaces';
 const NewTask: FC<INewTask> = ({ onAddTask }) => {
   const { isLoading, error, sendRequest: sendTaskRequest } = useHttp();
 
-  const createTask = (taskText: string, taskData: ITaskData) => {
-    const generatedId = taskData.name;
+  const createTask = (taskText: string, taskData: unknown) => {
+    const data = taskData as ITaskData;
+    const generatedId = data.name;
     const createdTask = { id: generatedId, text: taskText };
 
     onAddTask(createdTask);

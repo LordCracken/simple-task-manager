@@ -17,7 +17,7 @@ export interface IReqConf {
   body?: unknown;
 }
 
-export type ISendRequest = (requestConfig: IReqConf, applyData: (data: any) => void) => void;
+export type ISendRequest = (requestConfig: IReqConf, applyData: (data: unknown) => void) => void;
 
 export type IUseHttp = () => {
   isLoading: boolean;
@@ -31,11 +31,7 @@ export interface IServerTask {
   };
 }
 
-export interface ISection {
-  children: ReactNode;
-}
-
-export interface ITaskItem {
+export interface IWrapper {
   children: ReactNode;
 }
 
