@@ -1,17 +1,16 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
-import { IUseHttp } from '../interfaces';
+import { ISendRequest, IUseHttp } from '../interfaces';
 
-const useHttp: IUseHttp = (requestConfig, applyData) => {
+const useHttp: IUseHttp = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const { url, method, headers, body } = requestConfig;
-
-  const sendRequest = async () => {
+  const sendRequest: ISendRequest = useCallback(async (requestConfig, applyData) => {
     setIsLoading(true);
     setError(null);
     try {
+      const { url, method, headers, body } = requestConfig;
       const response = await fetch(url, {
         method: method ? method : 'GET',
         headers: headers ? headers : {},
@@ -28,7 +27,7 @@ const useHttp: IUseHttp = (requestConfig, applyData) => {
       setError((err as Error).message || 'Something went wrong!');
     }
     setIsLoading(false);
-  };
+  }, []);
 
   return {
     isLoading,

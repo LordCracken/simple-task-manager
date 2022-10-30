@@ -12,10 +12,13 @@ export interface IReqConf {
   body?: never;
 }
 
-export type IUseHttp = (
-  requestConfig: IReqConf,
-  applyData: (data: any) => void,
-) => { isLoading: boolean; error: string | null; sendRequest: () => void };
+export type ISendRequest = (requestConfig: IReqConf, applyData: (data: any) => void) => void;
+
+export type IUseHttp = () => {
+  isLoading: boolean;
+  error: string | null;
+  sendRequest: ISendRequest;
+};
 
 export interface IServerTask {
   [key: string]: {
@@ -44,5 +47,5 @@ export interface ITasks {
   items: ITask[];
   loading: boolean;
   error: string | null;
-  onFetch: () => void;
+  onFetch: ISendRequest;
 }

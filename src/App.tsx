@@ -9,22 +9,23 @@ import { IServerTask, ITask } from './interfaces';
 function App() {
   const [tasks, setTasks] = useState<ITask[]>([]);
 
-  const url =
-    'https://simple-tasks-manager-default-rtdb.europe-west1.firebasedatabase.app/tasks.json';
-  const transformTasks = (tasksObj: IServerTask) => {
-    const loadedTasks = [];
-
-    for (const taskKey in tasksObj) {
-      loadedTasks.push({ id: taskKey, text: tasksObj[taskKey].text });
-    }
-
-    setTasks(loadedTasks);
-  };
-
-  const { isLoading, error, sendRequest: fetchTasks } = useHttp({ url }, transformTasks);
+  const { isLoading, error, sendRequest: fetchTasks } = useHttp();
 
   useEffect(() => {
-    fetchTasks();
+    const url =
+      'https://simple-tasks-manager-default-rtdb.europe-west1.firebasedatabase.app/tasks.json';
+
+    const transformTasks = (tasksObj: IServerTask) => {
+      const loadedTasks = [];
+
+      for (const taskKey in tasksObj) {
+        loadedTasks.push({ id: taskKey, text: tasksObj[taskKey].text });
+      }
+
+      setTasks(loadedTasks);
+    };
+
+    fetchTasks({ url }, transformTasks);
   }, []);
 
   const taskAddHandler = (task: ITask) => {
